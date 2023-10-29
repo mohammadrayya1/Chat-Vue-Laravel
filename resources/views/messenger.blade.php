@@ -661,9 +661,12 @@
                 <div class="tab-pane fade h-100 show active" id="tab-content-chats" role="tabpanel">
                     <div class="d-flex flex-column h-100 position-relative">
                         <div class="hide-scrollbar">
-                            <chat-list />
+                            <div class="container py-8">
+                            <x-chat-list :$chats/>
+
                         </div>
                     </div>
+                </div>
                 </div>
                 <!-- Notifications - Notices -->
                 <div class="tab-pane fade h-100" id="tab-content-notifications" role="tabpanel">
@@ -1599,7 +1602,8 @@
         </aside>
         <!-- Sidebar -->
         <!-- Chat -->
-        <messenger :conversation="conversation" />
+        <x-messenger :$messages :$activchat />
+
         <!-- Chat -->
 
         <!-- Chat: Info -->
@@ -2625,19 +2629,33 @@
 </div>
 
 <!-- Scripts -->
-{{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>--}}
-<script src="{{ asset('js/moment.js') }}"></script>
-<script src="{{ asset('js/manifest.js') }}"></script>
-<script src="{{ asset('js/vendor.js') }}"></script>
+
 <script>
     const userId = "{{ Auth::id() }}";
     const csrf_token = "{{ csrf_token() }}";
 </script>
-<script src="{{ asset('js/messages.js') }}"></script>
+
 
 <script src="{{ asset('assets/js/vendor.js') }}"></script>
 <script src="{{ asset('assets/js/template.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="{{ asset('js/messenger.js') }}"></script>
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script>
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
 
+    var pusher = new Pusher('bb63c3428d2111814e85', {
+        cluster: 'eu',
+      authEndpoint:"/broadcasting/auth",
+    });
+
+    var channel = pusher.subscribe(`presence-Messenger.${userId}`);
+    channel.bind('my-message', function(data) {
+     addMessage(data.message.body);
+    });
+
+</script>
 {{--
         <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
         <script>

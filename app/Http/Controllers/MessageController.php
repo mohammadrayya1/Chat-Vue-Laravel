@@ -46,8 +46,8 @@ class MessageController extends Controller
            ]
        ]);
 
-//       $user =Auth::user();
-        $user=User::find(1);
+       $user =Auth::user();
+     //  $user=User::find(1);
 
        $conversation_id =$request->post("conversation_id");
        $user_id=$request->post("user_id");
