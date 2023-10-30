@@ -1,3 +1,7 @@
 {
-    "/js/app.js": "/js/app.js"
+    "/js/app.js": "/js/app.js",
+    "/js/messages.js": "/js/messages.js",
+    "/js/bootstrap.js": "/js/bootstrap.js",
+    "/js/manifest.js": "/js/manifest.js",
+    "/js/vendor.js": "/js/vendor.js"
 }

@@ -30,51 +30,51 @@
 </div>
 <div class="card-list">
     <!-- Title -->
-{{--    <div class="d-flex align-items-center my-4 px-6">--}}
-{{--        <small class="text-muted me-auto">Today</small>--}}
+    {{--    <div class="d-flex align-items-center my-4 px-6">--}}
+    {{--        <small class="text-muted me-auto">Today</small>--}}
 
-{{--        <a href="#" class="text-muted small">Clear all</a>--}}
-{{--    </div>--}}
+    {{--        <a href="#" class="text-muted small">Clear all</a>--}}
+    {{--    </div>--}}
     <!-- Title -->
 
     <!-- Card -->
     @php
 
-@endphp
+        @endphp
     @foreach($chats as $chat)
-   <a href="{{route('messenger',$chat->id)}}" class="card border-0 text-reset">
-        <div class="card-body">
+        <a href="{{route('messenger',$chat->id)}}" class="card border-0 text-reset">
+            <div class="card-body">
 
-            <div class="row gx-5">
-                <div class="col-auto">
+                <div class="row gx-5">
+                    <div class="col-auto">
 
-                    <div class="avatar avatar-online">
-                        <span class="avatar-text">{{strtoupper(substr($chat->participants[0]->name,0,1))}}</span>
+                        <div class="avatar avatar-online">
+                            <span class="avatar-text">{{strtoupper(substr($chat->participants[0]->name,0,1))}}</span>
 
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="d-flex align-items-center mb-2">
-                        <h5 class="me-auto mb-0">
-                            {{$chat->participants[0]->name}}
-                        </h5>
-                        <span class="extra-small text-muted ms-2">{{$chat->lastMessage->created_at->diffForHumans()}}</span>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <div class="line-clamp me-auto">
-                                {{Str::words($chat->lastMessage->body,20)}}
                         </div>
                     </div>
 
+                    <div class="col">
+                        <div class="d-flex align-items-center mb-2">
+                            <h5 class="me-auto mb-0">
+                                {{$chat->participants[0]->name}}
+                            </h5>
+                            <span class="extra-small text-muted ms-2">{{$chat->lastMessage->created_at->diffForHumans()}}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="line-clamp me-auto">
+                                {{Str::words($chat->lastMessage->body,20)}}
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+
+
             </div>
 
-
-
-        </div>
-
-    @endforeach
-    </a>
+            @endforeach
+        </a>
 </div>
 

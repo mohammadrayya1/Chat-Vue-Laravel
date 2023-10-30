@@ -662,7 +662,7 @@
                     <div class="d-flex flex-column h-100 position-relative">
                         <div class="hide-scrollbar">
                             <div class="container py-8">
-                            <x-chat-list :$chats/>
+                            <Chat-list/>
 
                         </div>
                     </div>
@@ -1602,7 +1602,7 @@
         </aside>
         <!-- Sidebar -->
         <!-- Chat -->
-        <x-messenger :$messages :$activchat />
+        <Messenger />
 
         <!-- Chat -->
 
@@ -2639,23 +2639,15 @@
 <script src="{{ asset('assets/js/vendor.js') }}"></script>
 <script src="{{ asset('assets/js/template.js') }}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="{{ asset('js/messenger.js') }}"></script>
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
 
-    var pusher = new Pusher('bb63c3428d2111814e85', {
-        cluster: 'eu',
-      authEndpoint:"/broadcasting/auth",
-    });
 
-    var channel = pusher.subscribe(`presence-Messenger.${userId}`);
-    channel.bind('my-message', function(data) {
-     addMessage(data.message.body);
-    });
+<script src="{{ asset('js/mainfest.js') }}"></script>
+<script src="{{ asset('js/messages.js') }}"></script>
+<script src="{{ asset('js/moment.js') }}"></script>
+<script src="{{ asset('js/vendor.js') }}"></script>
 
-</script>
+
+
 {{--
         <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
         <script>
@@ -2676,3 +2668,9 @@
 
 </body>
 </html>
+<script>
+    import ChatList from "../components/messages/ChatList";
+    export default {
+        components: {ChatList}
+    }
+</script>
