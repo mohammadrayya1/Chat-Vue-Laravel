@@ -34,5 +34,10 @@ export default {
     props: [
         "conversation"
     ],
+    data(){
+        return{
+            messages:[],
+        }
+    }
 }
 </script>

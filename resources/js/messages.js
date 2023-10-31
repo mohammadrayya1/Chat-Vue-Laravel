@@ -4,6 +4,10 @@ import { createApp  } from "vue";
 
 import Messenger from "../components/messages/Messenger.vue"
 import ChatList from "../components/messages/ChatList.vue";
+import Echo from 'laravel-echo';
+
+window.Pusher = require('pusher-js');
+
 
 
 const chatApp = createApp({
@@ -11,16 +15,64 @@ const chatApp = createApp({
         return {
             conversations: [],
             conversation: null,
-            messages: [],
             userId: userId,
-            csrf_token:csrf_token
+            csrf_token:csrf_token,
+            laravelEco:null,
+            messages:[],
+            users: [],
+            chatChannel: null,
 
         }
+    },
+    mounted() {
+
+        this.laravelEco = new Echo({
+            broadcaster: 'pusher',
+            key: '2930f1044dc9bfe76e5a',
+            cluster: 'eu',
+            forceTLS: true,
+        });
+        this.laravelEco.join(`Messenger.${this.userId}`)
+            .listen('.new-message',(data)=>{
+                this.messages.push(data.message);
+                let container = document.querySelector('#chat-body');
+                container.scrollTop = container.scrollHeight;
+            });
+
+
+        // this.chatChannel = this.laravelEcho.join('Chat')
+        //     .joining((user) => {
+        //         for (let i in this.conversations) {
+        //             let conversation = this.conversations[i];
+        //             if (conversation.participants[0].id == user.id) {
+        //                 this.conversations[i].participants[0].isOnline = true;
+        //                 return;
+        //             }
+        //         }
+        //     })
+        //     .leaving((user) => {
+        //         for (let i in this.conversations) {
+        //             let conversation = this.conversations[i];
+        //             if (conversation.participants[0].id == user.id) {
+        //                 this.conversations[i].participants[0].isOnline = false;
+        //                 return;
+        //             }
+        //         }
+        //     })
     },
     methods: {
         moment(time) {
             return moment(time);
-        }
+        },
+        isOnline(user) {
+            for (let i in this.users) {
+                if (this.users[i].id == user.id) {
+                    return this.users[i].isOnline;
+                }
+            }
+            return false;
+        },
+
         },
 });
 chatApp.component('Messenger', Messenger);

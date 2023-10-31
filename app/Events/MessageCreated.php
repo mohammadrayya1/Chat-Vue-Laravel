@@ -31,11 +31,14 @@ class MessageCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
+
         $other_user=$this->message->conversation->participants()->where('user_id','<>',$this->message->user_id)->first();
-        return new PresenceChannel('Messenger'.$other_user->id);
+
+        return new PresenceChannel('Messenger.'.$other_user->id);
     }
 
-    public function broadcastAs(){
-        return 'my-message';
+    public function broadcastAs()
+    {
+        return 'new-message';
     }
 }

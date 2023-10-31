@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="row gx-5">
                         <div class="col-auto">
-                            <div class="avatar" :class="{'avatar-online': conversation.participants[0].name}">
+                            <div class="avatar" :class="{'avatar-online': conversation.participants[0].isOnline}">
                                 <img v-bind:src="conversation.participants[0].avatar_url">
                             </div>
                         </div>
@@ -65,16 +65,26 @@ data(){
     } ,
     methods:{
                 setConversation(conversation) {
-                    this.$root.conversation=[];
+                    // this.$root.conversation=[];
                     this.$root.conversation = conversation;
-
+                    let container = document.querySelector('#chat-body');
+                    container.scrollTop = container.scrollHeight;
             }
     },
     mounted() {
-        fetch('/api/conversations').then(response=>response.json())
+
+
+        fetch('/api/conversations')
+            .then(response=>response.json())
             .then(json=>{
+                for (let i in json.data) {
+                    json.data[i].participants[0].isOnline = false;
+                }
                 this.conversations=json.data;
+                let container = document.querySelector('#chat-body');
+                container.scrollTop = container.scrollHeight;
             })
-    }
+    },
+
 }
 </script>

@@ -6,7 +6,7 @@
         <!-- Chat: Files -->
 
         <!-- Chat: Form -->
-        <form class="chat-form rounded-pill bg-dark" data-emoji-form="" method="post" action="/api/messages">
+        <form class="chat-form rounded-pill bg-dark" data-emoji-form="" method="post" action="/api/messages" @submit.prevent="sendMessage()">
             <input type="hidden" name="_token" :value="$root.csrfToken">
             <input type="hidden" name="conversation_id" :value="conversation? conversation.id : 0">
             <div class="row align-items-center gx-0">
@@ -18,7 +18,7 @@
 
                 <div class="col">
                     <div class="input-group">
-                        <textarea name="message" class="form-control px-0" placeholder="Type your message..." rows="1" data-emoji-input="" data-autosize="true"></textarea>
+                        <textarea name="message"  v-model="message" class="form-control px-0"  rows="1" data-emoji-input="" data-autosize="true"></textarea>
 
                         <a href="#" class="input-group-text text-body pe-0" data-emoji-btn="">
                             <span class="icon icon-lg">
@@ -44,5 +44,39 @@ export default {
     props: [
         'conversation'
     ],
+
+    data(){
+        return{
+            message:"Enter you message.."
+        }
+    },
+    methods:{
+        sendMessage(){
+
+
+
+            let data={
+                conversation_id:this.conversation.id,
+                message:this.message,
+                _token:this.$root.csrf_token
+            }
+            fetch('api/messages',{
+                method: "POST",
+                    mode: "cors",
+                    headers: {
+                    "Content-Type": "application/json",
+
+                },
+
+                    body: JSON.stringify(data),
+                    }).then(response=>response.json())
+                .then(json=>{
+                    this.$root.messages.push(json);
+                    let container = document.querySelector('#chat-body');
+                    container.scrollTop = container.scrollHeight;
+                })
+            this.message = "";
+        }
+    }
 }
 </script>

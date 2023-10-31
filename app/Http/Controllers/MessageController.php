@@ -20,7 +20,7 @@ class MessageController extends Controller
     public function index($id){
         $user=Auth::user();
         $conversation =$user->conversation()->findOrFail($id);
-        return $conversation->messages()->paginate();
+        return $conversation->messages()->latest()->paginate(15);
     }
 
     /**
@@ -46,8 +46,8 @@ class MessageController extends Controller
            ]
        ]);
 
-       $user =Auth::user();
-     //  $user=User::find(1);
+    $user =Auth::user();
+//      $user=User::find(1);
 
        $conversation_id =$request->post("conversation_id");
        $user_id=$request->post("user_id");
@@ -94,7 +94,7 @@ class MessageController extends Controller
            ]);
 
            DB::commit();
-
+            $message->load('user');
            broadcast(new MessageCreated($message));
        }catch (Throwable $e){
            DB::rollBack();
