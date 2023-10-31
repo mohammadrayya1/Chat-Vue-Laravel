@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function (){
 
-    Route::get('conversation',[ConversationController::class,'index']);
+    Route::get('conversations',[ConversationController::class,'index']);
     Route::get('conversation/{conversation}',[ConversationController::class,'show']);
 
 

@@ -22,11 +22,11 @@
 
         <!-- Chats -->
         <div class="card-list" id="chat-list">
-            <a v-for="conversation in $root.conversations" v-bind:key="conversation.id" v-bind:href="'#' + conversation.id" @click.prevent="setConversation(conversation)" class="card border-0 text-reset">
+            <a v-for="conversation in conversations" v-bind:key="conversation.id" v-bind:href="'#' + conversation.id" @click.prevent="setConversation(conversation)" class="card border-0 text-reset">
                 <div class="card-body">
                     <div class="row gx-5">
                         <div class="col-auto">
-                            <div class="avatar" :class="{'avatar-online': conversation.participants[0].isOnline}">
+                            <div class="avatar" :class="{'avatar-online': conversation.participants[0].name}">
                                 <img v-bind:src="conversation.participants[0].avatar_url">
                             </div>
                         </div>
@@ -34,16 +34,16 @@
                         <div class="col">
                             <div class="d-flex align-items-center mb-3">
                                 <h5 class="me-auto mb-0">{{ conversation.participants[0].name }}</h5>
-                                <span class="text-muted extra-small ms-2">{{ $root.moment(conversation.last_message.created_at).fromNow() }}</span>
+                                <span class="text-muted extra-small ms-2">{{$root.moment(conversation.last_message.created_at).fromNow() }}</span>
                             </div>
 
                             <div class="d-flex align-items-center">
                                 <div class="line-clamp me-auto">
-                                    {{ conversation.last_message.type == 'attachment'? conversation.last_message.body.file_name : conversation.last_message.body }}
+                                    {{  conversation.last_message.body }}
                                 </div>
-                                <div v-if="conversation.new_messages" class="badge badge-circle bg-primary ms-5">
-                                    <span>{{ conversation.new_messages }}</span>
-                                </div>
+<!--                                <div v-if="conversation.new_messages" class="badge badge-circle bg-primary ms-5">-->
+<!--                                    <span>{{ conversation.new_messages }}</span>-->
+<!--                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,25 @@
 
 <script>
 import { onMounted } from '@vue/runtime-core';
-export default {
 
+export default {
+data(){
+    return{
+        conversations:[]
+     };
+    } ,
+    methods:{
+                setConversation(conversation) {
+                    this.$root.conversation=[];
+                    this.$root.conversation = conversation;
+
+            }
+    },
+    mounted() {
+        fetch('/api/conversations').then(response=>response.json())
+            .then(json=>{
+                this.conversations=json.data;
+            })
+    }
 }
 </script>

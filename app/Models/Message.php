@@ -15,6 +15,7 @@ class Message extends Model
         'user_id',"body",'type','conversation_id'
     ];
 
+   protected $with=['user'];
 
     public function conversation(){
         return $this->belongsTo(Conversation::class);

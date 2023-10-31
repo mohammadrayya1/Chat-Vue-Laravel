@@ -9,7 +9,7 @@ class Conversation extends Model
 {
     use HasFactory;
 
-
+protected $with=['participants','messages','lastMessage','user'];
     protected $fillable=[
         'user_id',"lable",'last_message_id','type'
     ];

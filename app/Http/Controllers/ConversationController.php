@@ -12,7 +12,19 @@ class ConversationController extends Controller
 
         public function index(){
             $user=Auth::user();
-            return $user->conversation()->paginate();
+//            return $user->conversation()->paginate();
+            return $user->conversation()->with([
+                'lastMessage',
+                'participants' => function($builder) use ($user) {
+                    $builder->where('id', '<>', $user->id);
+                },])
+//                ->withCount([
+//                    'recipients as new_messages' => function($builder) use ($user) {
+//                        $builder->where('recipients.user_id', '=', $user->id)
+//                            ->whereNull('read_at');
+//                    }
+//                ])
+                ->paginate();
         }
 
         public  function show(Conversation $conversation){

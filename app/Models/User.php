@@ -22,7 +22,9 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
+    protected $appends = [
+        'avatar_url',
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -61,5 +63,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Message::class,'recipients')->withPivot([
             'readt_at','deleted_at'
         ]);;
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        return 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=' . $this->name;
     }
 }

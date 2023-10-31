@@ -4,15 +4,15 @@
 
             <div  class="d-flex flex-column h-100 position-relative">
                 <!-- Chat: Header -->
-                <Chat-header  />
+                <Chat-header :conversation="conversation" />
                 <!-- Chat: Header -->
 
                 <!-- Chat: Content -->
-                <Chat-content  />
+                <Chat-content :conversation="conversation"  />
                 <!-- Chat: Content -->
 
                 <!-- Chat: Footer -->
-                <Chat-footer  />
+                <Chat-footer :conversation="conversation" />
                 <!-- Chat: Footer -->
             </div>
         </div>
@@ -31,6 +31,8 @@ export default {
     components: {
         ChatHeader, ChatContent, ChatFooter
     },
-
+    props: [
+        "conversation"
+    ],
 }
 </script>

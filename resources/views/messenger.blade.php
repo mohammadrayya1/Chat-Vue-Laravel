@@ -1602,7 +1602,7 @@
         </aside>
         <!-- Sidebar -->
         <!-- Chat -->
-        <Messenger />
+             <Messenger  :conversation="conversation"/>
 
         <!-- Chat -->
 
