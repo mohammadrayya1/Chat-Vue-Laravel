@@ -22,7 +22,7 @@
 
         <!-- Chats -->
         <div class="card-list" id="chat-list">
-            <a v-for="conversation in conversations" v-bind:key="conversation.id" v-bind:href="'#' + conversation.id" @click.prevent="setConversation(conversation)" class="card border-0 text-reset">
+            <a v-for="conversation in $root.conversations" v-bind:key="conversation.id" v-bind:href="'#' + conversation.id" @click.prevent="setConversation(conversation)" class="card border-0 text-reset">
                 <div class="card-body">
                     <div class="row gx-5">
                         <div class="col-auto">
@@ -60,7 +60,8 @@ import { onMounted } from '@vue/runtime-core';
 export default {
 data(){
     return{
-        conversations:[]
+        conversations:[],
+        friends:[]
      };
     } ,
     methods:{
@@ -78,9 +79,12 @@ data(){
             .then(response=>response.json())
             .then(json=>{
                 for (let i in json.data) {
-                    json.data[i].participants[0].isOnline = false;
+                    let chat=json.data[i];
+                    let user=chat.participants[0];
+                    user.isOnline = false;
+                    this.$root.users.push(user);
                 }
-                this.conversations=json.data;
+                this.$root.conversations=json.data;
                 let container = document.querySelector('#chat-body');
                 container.scrollTop = container.scrollHeight;
             })

@@ -18,7 +18,7 @@
 
                 <div class="col">
                     <div class="input-group">
-                        <textarea name="message"  v-model="message" class="form-control px-0"  rows="1" data-emoji-input="" data-autosize="true"></textarea>
+                        <textarea name="message"  v-model="message" class="form-control px-0"  rows="1" data-emoji-input="" data-autosize="true"  @keyup="startTyping()"  ></textarea>
 
                         <a href="#" class="input-group-text text-body pe-0" data-emoji-btn="">
                             <span class="icon icon-lg">
@@ -47,7 +47,9 @@ export default {
 
     data(){
         return{
-            message:"Enter you message.."
+            message:"Enter you message..",
+            start_typing: false,
+            timeout: null
         }
     },
     methods:{
@@ -76,6 +78,25 @@ export default {
                     container.scrollTop = container.scrollHeight;
                 })
             this.message = "";
+        },
+        startTyping() {
+            if (!this.start_typing) {
+                this.start_typing = true;
+                this.$root.chatChannel.whisper('typing', {
+                    id: this.$root.userId,
+                    conversation_id: this.$root.conversation.id
+                });
+            }
+            if (this.timeout) {
+                clearTimeout(this.timeout);
+            }
+            this.timeout = setTimeout(() => {
+                this.start_typing = false;
+                this.$root.chatChannel.whisper('stopped-typing', {
+                    id: this.$root.userId,
+                    conversation_id: this.$root.conversation.id
+                });
+            }, 3000);
         }
     }
 }

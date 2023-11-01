@@ -25,5 +25,6 @@ Broadcast::channel('Messenger.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('Chat', function($user) {
+
     return $user;
 });

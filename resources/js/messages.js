@@ -40,25 +40,41 @@ const chatApp = createApp({
             });
 
 
-        // this.chatChannel = this.laravelEcho.join('Chat')
-        //     .joining((user) => {
-        //         for (let i in this.conversations) {
-        //             let conversation = this.conversations[i];
-        //             if (conversation.participants[0].id == user.id) {
-        //                 this.conversations[i].participants[0].isOnline = true;
-        //                 return;
-        //             }
-        //         }
-        //     })
-        //     .leaving((user) => {
-        //         for (let i in this.conversations) {
-        //             let conversation = this.conversations[i];
-        //             if (conversation.participants[0].id == user.id) {
-        //                 this.conversations[i].participants[0].isOnline = false;
-        //                 return;
-        //             }
-        //         }
-        //     })
+        this.chatChannel =  this.laravelEco.join('Chat')
+            .joining((user) => {
+
+                for (let i in this.conversations) {
+                    let conversation = this.conversations[i];
+
+                    if (conversation.participants[0].id == user.id) {
+                        this.conversations[i].participants[0].isOnline = true;
+                        return;
+                    }
+
+                }
+            })
+            .leaving((user) => {
+                for (let i in this.conversations) {
+                    let conversation = this.conversations[i];
+                    if (conversation.participants[0].id == user.id) {
+                        this.conversations[i].participants[0].isOnline = false;
+                        return;
+                    }
+                }
+            })
+            .listenForWhisper('typing', (e) => {
+           let user = this.findUser(e.id, e.conversation_id);
+
+           if (user) {
+               user.isTyping = true;
+           }
+       })
+           .listenForWhisper('stopped-typing', (e) => {
+               let user = this.findUser(e.id, e.conversation_id);
+               if (user) {
+                   user.isTyping = false;
+               }
+           });
     },
     methods: {
         moment(time) {
@@ -71,6 +87,13 @@ const chatApp = createApp({
                 }
             }
             return false;
+        }, findUser(id, conversation_id) {
+            for (let i in this.conversations) {
+                let conversation = this.conversations[i];
+                if (conversation.id === conversation_id && conversation.participants[0].id == id) {
+                    return this.conversations[i].participants[0];
+                }
+            }
         },
 
         },
